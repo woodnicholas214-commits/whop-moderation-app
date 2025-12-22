@@ -1,0 +1,205 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // Using SQLite for local development. Change to "postgresql" for production.
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  whopId      String   @unique // Whop company/workspace ID
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products    Product[]
+  rules       ModerationRule[]
+  incidents   Incident[]
+  exemptions  Exemption[]
+  auditEvents AuditEvent[]
+  userPermissions UserPermission[]
+  settings    AppSettings?
+
+  @@index([whopId])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  companyId   String
+  whopId      String   @unique // Whop product ID
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  rules       ModerationRule[]
+  incidents   Incident[]
+
+  @@index([companyId])
+  @@index([whopId])
+}
+
+model ModerationRule {
+  id          String   @id @default(cuid())
+  companyId   String?
+  productId   String?
+  name        String
+  description String?
+  enabled     Boolean  @default(true)
+  priority    Int      @default(0) // Higher = evaluated first
+  severity    String   @default("medium") // low, medium, high
+  mode        String   @default("enforce") // dry_run, enforce
+  stopOnMatch Boolean  @default(false) // Stop evaluating other rules after this one matches
+  
+  // Scope configuration (JSON stored as String for SQLite)
+  scope       String   // JSON: { type: "all" | "selected", channels: string[], forums: string[], exclusions: string[] }
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String?  // User ID
+  updatedBy   String?  // User ID
+
+  company     Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  conditions  RuleCondition[]
+  actions     RuleAction[]
+  incidents   Incident[]
+
+  @@index([companyId])
+  @@index([productId])
+  @@index([enabled, priority])
+}
+
+model RuleCondition {
+  id       String   @id @default(cuid())
+  ruleId   String
+  type     String   // keyword_exact, keyword_contains, regex, profanity, link_allow, link_block, domain_allow, domain_block, repeated_text, excessive_caps, emoji_spam, mention_spam, message_frequency, suspicious_pattern
+  config   String   // JSON: Condition-specific configuration
+  priority Int      @default(0) // Order within rule
+  
+  rule     ModerationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId])
+}
+
+model RuleAction {
+  id       String   @id @default(cuid())
+  ruleId   String
+  type     String   // flag_review, auto_hide, auto_delete, warn_user, timeout_user, mute_user, escalate_admin
+  config   String   // JSON: Action-specific configuration (e.g., timeout duration, escalation channel)
+  priority Int      @default(0) // Order of execution
+  
+  rule     ModerationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId])
+}
+
+model Exemption {
+  id        String   @id @default(cuid())
+  companyId String
+  type      String   // user, role, trusted_user, staff, mod
+  value     String   // User ID, role ID, etc.
+  reason    String?
+  createdAt DateTime @default(now())
+  createdBy String?  // User ID
+  
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, type, value])
+  @@index([companyId, type])
+}
+
+model Incident {
+  id              String   @id @default(cuid())
+  companyId       String
+  productId       String?
+  ruleId          String?
+  source          String   // chat, forum
+  contentId       String   // Message/post ID from Whop
+  authorId        String   // User ID from Whop
+  contentSnapshot String   // JSON: Full content at time of incident
+  ruleHits        String   // JSON: Array of rule matches with details
+  features        String   // JSON: Computed features (caps ratio, emoji count, etc.)
+  actionsTaken    String   // JSON: Array of actions attempted/applied
+  status          String   @default("pending") // pending, approved, removed, restored, dismissed
+  reviewer        String?  // User ID who reviewed
+  reviewedAt      DateTime?
+  reviewNotes     String?
+  createdAt       DateTime @default(now())
+  
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  product         Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rule            ModerationRule? @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([productId])
+  @@index([ruleId])
+  @@index([status, createdAt])
+  @@index([source, contentId])
+}
+
+model AuditEvent {
+  id        String   @id @default(cuid())
+  companyId String
+  actor     String   // User ID
+  action    String   // create, update, delete, approve, remove, restore, etc.
+  entity    String   // rule, incident, exemption, etc.
+  entityId  String?  // ID of the affected entity
+  diff      String?  // JSON: Before/after diff for updates
+  metadata  String?  // JSON: Additional context
+  createdAt DateTime @default(now())
+  
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, createdAt])
+  @@index([actor, createdAt])
+  @@index([entity, entityId])
+}
+
+model WebhookEvent {
+  id          String   @id @default(cuid())
+  eventId     String   @unique // Whop event ID for idempotency
+  eventType   String
+  payload     String   // JSON: Event payload
+  processed   Boolean  @default(false)
+  processedAt DateTime?
+  error       String?
+  createdAt   DateTime @default(now())
+
+  @@index([eventId])
+  @@index([processed, createdAt])
+}
+
+model UserPermission {
+  id        String   @id @default(cuid())
+  companyId String
+  userId    String   // Whop user ID
+  role      String   // admin, moderator, viewer
+  grantedBy String?  // User ID who granted permission
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, userId])
+  @@index([companyId])
+  @@index([userId])
+}
+
+model AppSettings {
+  id        String   @id @default(cuid())
+  companyId String   @unique
+  settings  String   // JSON: All settings
+  updatedAt DateTime @updatedAt
+  updatedBy String?  // User ID
+  
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
