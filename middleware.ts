@@ -11,6 +11,7 @@ export const config = {
   matcher: [
     '/dashboard/:path*',
     '/api/:path*',
+    // Don't match root to avoid blocking it
   ],
 };
 

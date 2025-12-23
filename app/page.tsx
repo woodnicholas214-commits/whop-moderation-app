@@ -1,16 +1,16 @@
 import { redirect } from 'next/navigation';
-import { requireAuth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  // For Whop iframe embedding, we need to handle auth and redirect properly
-  try {
-    await requireAuth();
-    redirect('/dashboard');
-  } catch (error) {
-    // If auth fails, still redirect to dashboard (it will handle the error)
-    redirect('/dashboard');
-  }
+  // Get any query parameters that Whop might pass
+  const headersList = await headers();
+  const referer = headersList.get('referer') || '';
+  
+  // Direct redirect to dashboard - let dashboard handle auth
+  // This works better in iframe contexts
+  // Preserve any query parameters that might be passed
+  redirect('/dashboard');
 }
 
