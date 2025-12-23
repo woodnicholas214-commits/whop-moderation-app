@@ -44,15 +44,81 @@ export async function POST(request: NextRequest) {
     const rulesEngine = new RulesEngine(prisma);
     const whopClient = getWhopClient();
     
-    // TODO: Fetch messages from Whop API
-    // Example structure (needs to be updated with actual Whop API):
-    // const messages = await whopClient.getRecentMessages(channelIds);
-    
-    // For now, return a placeholder response
+    // Get channels if not provided
+    let channelsToCheck = channelIds || [];
+    if (channelsToCheck.length === 0) {
+      // Fetch all channels for the company
+      try {
+        const channels = await whopClient.getCompanyChannels(company.whopId);
+        channelsToCheck = channels.map(c => c.id);
+      } catch (error) {
+        console.error('Failed to fetch channels:', error);
+      }
+    }
+
+    const processedMessages: any[] = [];
+    const errors: any[] = [];
+
+    // Fetch and process messages from each channel
+    for (const channelId of channelsToCheck) {
+      try {
+        // Get last processed timestamp (store in database or cache)
+        const lastProcessed = await prisma.webhookEvent.findFirst({
+          where: {
+            eventType: { in: ['message.created', 'message.updated'] },
+            payload: { contains: channelId },
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        const since = lastProcessed?.createdAt 
+          ? new Date(lastProcessed.createdAt.getTime() + 1000).toISOString()
+          : undefined;
+
+        // Fetch messages
+        const messages = await whopClient.getChannelMessages(channelId, 50, since);
+
+        // Process each message
+        for (const message of messages) {
+          try {
+            const incidentData = await rulesEngine.evaluate(
+              companyId,
+              null,
+              'chat',
+              channelId,
+              message.content || message.text || '',
+              message.author?.id || message.user_id || 'unknown',
+              message.author?.roles || []
+            );
+
+            if (incidentData) {
+              // Apply actions (similar to webhook processing)
+              // ... (implement action application logic)
+              processedMessages.push({
+                messageId: message.id,
+                channelId,
+                matched: true,
+                ruleHits: incidentData.ruleHits.length,
+              });
+            }
+          } catch (error: any) {
+            errors.push({ messageId: message.id, error: error.message });
+          }
+        }
+      } catch (error: any) {
+        errors.push({ channelId, error: error.message });
+        console.error(`Error processing channel ${channelId}:`, error);
+      }
+    }
+
     return NextResponse.json({
       success: true,
-      message: 'Polling endpoint ready. Needs Whop API integration.',
-      note: 'This endpoint requires Whop API endpoints for fetching messages. Please check Whop API documentation for message endpoints.',
+      processed: processedMessages.length,
+      errors: errors.length,
+      details: {
+        processedMessages,
+        errors: errors.length > 0 ? errors : undefined,
+      },
     });
   } catch (error: any) {
     console.error('Poll error:', error);

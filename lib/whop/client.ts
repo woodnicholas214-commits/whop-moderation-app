@@ -78,18 +78,73 @@ export class WhopClient {
     return this.request<WhopChannel[]>(`/companies/${companyId}/channels`);
   }
 
+  /**
+   * Delete a message
+   * Requires: chat:moderate permission
+   */
   async deleteMessage(channelId: string, messageId: string): Promise<void> {
-    // TODO: Replace with actual Whop API endpoint
-    await this.request(`/channels/${channelId}/messages/${messageId}`, {
-      method: 'DELETE',
-    });
+    try {
+      await this.request(`/channels/${channelId}/messages/${messageId}`, {
+        method: 'DELETE',
+      });
+    } catch (error: any) {
+      // Try alternative endpoint
+      try {
+        await this.request(`/chat/${channelId}/messages/${messageId}`, {
+          method: 'DELETE',
+        });
+      } catch (error2: any) {
+        throw new Error(`Failed to delete message: ${error.message}. Please check Whop API documentation.`);
+      }
+    }
   }
 
+  /**
+   * Hide a forum post
+   * Requires: forum:moderate permission
+   */
   async hidePost(forumId: string, postId: string): Promise<void> {
-    // TODO: Replace with actual Whop API endpoint
-    await this.request(`/forums/${forumId}/posts/${postId}/hide`, {
-      method: 'POST',
+    try {
+      await this.request(`/forums/${forumId}/posts/${postId}/hide`, {
+        method: 'POST',
+      });
+    } catch (error: any) {
+      // Try alternative endpoint
+      try {
+        await this.request(`/forum/${forumId}/posts/${postId}/hide`, {
+          method: 'POST',
+        });
+      } catch (error2: any) {
+        throw new Error(`Failed to hide post: ${error.message}. Please check Whop API documentation.`);
+      }
+    }
+  }
+
+  /**
+   * Get forum posts
+   * Requires: forum:read permission
+   */
+  async getForumPosts(
+    forumId: string,
+    limit: number = 50,
+    since?: string
+  ): Promise<any[]> {
+    const params = new URLSearchParams({
+      limit: limit.toString(),
     });
+    if (since) {
+      params.append('since', since);
+    }
+    
+    try {
+      return await this.request<any[]>(`/forums/${forumId}/posts?${params}`);
+    } catch (error: any) {
+      try {
+        return await this.request<any[]>(`/forum/${forumId}/posts?${params}`);
+      } catch (error2: any) {
+        throw new Error(`Failed to fetch forum posts: ${error.message}`);
+      }
+    }
   }
 
   async sendDM(userId: string, message: string): Promise<void> {
@@ -126,17 +181,47 @@ export class WhopClient {
 
   /**
    * Get recent messages from a channel
-   * TODO: Replace with actual Whop API endpoint
-   * This endpoint may not exist - check Whop API documentation
+   * Requires: chat:read permission
    */
   async getChannelMessages(
     channelId: string,
     limit: number = 50,
     since?: string
   ): Promise<any[]> {
-    // TODO: Implement actual Whop API call
-    // Example: GET /api/v2/channels/{channelId}/messages?limit=50&since={timestamp}
-    throw new Error('Message fetching not yet implemented - needs Whop API endpoint');
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+    });
+    if (since) {
+      params.append('since', since);
+    }
+    
+    // Try common API endpoint patterns
+    try {
+      return await this.request<any[]>(`/channels/${channelId}/messages?${params}`);
+    } catch (error: any) {
+      // If that fails, try alternative endpoint
+      try {
+        return await this.request<any[]>(`/chat/${channelId}/messages?${params}`);
+      } catch (error2: any) {
+        throw new Error(`Failed to fetch messages: ${error.message}. Please check Whop API documentation for the correct endpoint.`);
+      }
+    }
+  }
+
+  /**
+   * Get a specific message by ID
+   * Requires: chat:read permission
+   */
+  async getMessage(channelId: string, messageId: string): Promise<any> {
+    try {
+      return await this.request(`/channels/${channelId}/messages/${messageId}`);
+    } catch (error: any) {
+      try {
+        return await this.request(`/chat/${channelId}/messages/${messageId}`);
+      } catch (error2: any) {
+        throw new Error(`Failed to fetch message: ${error.message}`);
+      }
+    }
   }
 
   /**
