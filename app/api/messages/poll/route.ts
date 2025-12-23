@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { RulesEngine } from '@/lib/rules-engine';
 import { getWhopClient } from '@/lib/whop/client';
+import { stringifyJson } from '@/lib/json-helper';
 
 export async function POST(request: NextRequest) {
   try {
@@ -92,13 +93,58 @@ export async function POST(request: NextRequest) {
             );
 
             if (incidentData) {
-              // Apply actions (similar to webhook processing)
-              // ... (implement action application logic)
+              // Get matching rules and apply actions
+              const rules = await prisma.moderationRule.findMany({
+                where: {
+                  id: { in: incidentData.ruleHits.map(h => h.ruleId) },
+                },
+                include: { actions: true },
+              });
+
+              const actionsTaken: any[] = [];
+
+              for (const rule of rules) {
+                for (const action of rule.actions) {
+                  try {
+                    if (action.type === 'auto_delete' && rule.mode === 'enforce') {
+                      try {
+                        await whopClient.deleteMessage(channelId, message.id);
+                        actionsTaken.push({ type: 'auto_delete', status: 'success', ruleId: rule.id });
+                      } catch (error: any) {
+                        actionsTaken.push({ type: 'auto_delete', status: 'error', error: error.message, ruleId: rule.id });
+                      }
+                    } else if (action.type === 'flag_review') {
+                      actionsTaken.push({ type: 'flag_review', status: 'success', ruleId: rule.id });
+                    }
+                  } catch (error: any) {
+                    console.error(`Error applying action ${action.type}:`, error);
+                  }
+                }
+              }
+
+              // Create incident
+              await prisma.incident.create({
+                data: {
+                  companyId,
+                  productId: null,
+                  ruleId: incidentData.ruleHits[0]?.ruleId || null,
+                  source: 'chat',
+                  contentId: message.id,
+                  authorId: incidentData.authorId,
+                  contentSnapshot: stringifyJson(incidentData.contentSnapshot),
+                  ruleHits: stringifyJson(incidentData.ruleHits),
+                  features: stringifyJson(incidentData.features),
+                  actionsTaken: stringifyJson(actionsTaken),
+                  status: 'pending',
+                },
+              });
+
               processedMessages.push({
                 messageId: message.id,
                 channelId,
                 matched: true,
                 ruleHits: incidentData.ruleHits.length,
+                actionsTaken: actionsTaken.length,
               });
             }
           } catch (error: any) {
