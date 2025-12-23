@@ -49,7 +49,7 @@ export async function PATCH(
     if ((domains && Array.isArray(domains)) || (links && Array.isArray(links))) {
       const condition = rule.conditions[0];
       if (condition) {
-        const currentConfig = parseJson(condition.config, {});
+        const currentConfig = parseJson(condition.config, { domains: [], links: [] }) as { domains?: string[]; links?: string[] };
         const newConfig: any = {
           ...currentConfig,
         };

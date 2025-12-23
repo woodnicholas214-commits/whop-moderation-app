@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       let links: string[] = [];
       
       if (condition) {
-        const config = parseJson(condition.config, {});
+        const config = parseJson(condition.config, { domains: [], links: [] }) as { domains?: string[]; links?: string[] };
         domains = config.domains || [];
         links = config.links || [];
       }
