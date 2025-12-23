@@ -4,25 +4,36 @@ import { requireAuth } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const session = await requireAuth();
-  
-  // Get company ID - use from session or find default company
-  let companyId = session.companyId;
-  if (!companyId) {
-    const company = await prisma.company.findFirst({
-      where: { whopId: 'default_company' },
-    });
-    companyId = company?.id || '';
-  }
+  try {
+    const session = await requireAuth();
+    
+    // Get company ID - use from session or find default company
+    let companyId = session.companyId;
+    if (!companyId) {
+      try {
+        const company = await prisma.company.findFirst({
+          where: { whopId: 'default_company' },
+        });
+        companyId = company?.id || '';
+      } catch (dbError) {
+        console.error('Database error:', dbError);
+        return (
+          <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-gray-900">Database Connection Error</h1>
+            <p className="text-gray-600">Unable to connect to database. Please check your DATABASE_URL environment variable.</p>
+          </div>
+        );
+      }
+    }
 
-  if (!companyId) {
-    return (
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">No Company Found</h1>
-        <p className="text-gray-600">Please run the seed script: npm run db:seed</p>
-      </div>
-    );
-  }
+    if (!companyId) {
+      return (
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold text-gray-900">No Company Found</h1>
+          <p className="text-gray-600">Please run the seed script: npm run db:seed</p>
+        </div>
+      );
+    }
 
   const [rulesCount, incidentsCount, pendingCount] = await Promise.all([
     prisma.moderationRule.count({
@@ -66,5 +77,14 @@ export default async function DashboardPage() {
       </div>
     </div>
   );
+  } catch (error: any) {
+    console.error('Dashboard error:', error);
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold text-gray-900">Error</h1>
+        <p className="text-gray-600">An error occurred: {error.message || 'Unknown error'}</p>
+      </div>
+    );
+  }
 }
 

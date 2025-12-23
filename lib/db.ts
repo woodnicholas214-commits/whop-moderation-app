@@ -12,7 +12,19 @@ export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   });
+
+// Test database connection on initialization
+if (typeof window === 'undefined') {
+  prisma.$connect().catch((error) => {
+    console.error('Failed to connect to database:', error);
+  });
+}
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
