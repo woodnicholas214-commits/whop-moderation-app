@@ -42,9 +42,18 @@ export async function PATCH(
       },
     });
 
-    // In development, allow if no permissions are set
+    // Check if ANY permissions exist for this company
+    const anyPermissions = await prisma.userPermission.findFirst({
+      where: { companyId },
+    });
+
     if (!requesterPermission) {
-      if (process.env.NODE_ENV !== 'development') {
+      // If no permissions exist at all, allow first user to modify (bootstrap)
+      if (!anyPermissions) {
+        console.log('No permissions exist, allowing bootstrap access');
+        // Allow access
+      } else {
+        // Permissions exist but requester doesn't have one - require admin
         return NextResponse.json(
           { error: 'Unauthorized - Admin access required' },
           { status: 403 }
@@ -117,9 +126,18 @@ export async function DELETE(
       },
     });
 
-    // In development, allow if no permissions are set
+    // Check if ANY permissions exist for this company
+    const anyPermissions = await prisma.userPermission.findFirst({
+      where: { companyId },
+    });
+
     if (!requesterPermission) {
-      if (process.env.NODE_ENV !== 'development') {
+      // If no permissions exist at all, allow first user to delete (bootstrap)
+      if (!anyPermissions) {
+        console.log('No permissions exist, allowing bootstrap access');
+        // Allow access
+      } else {
+        // Permissions exist but requester doesn't have one - require admin
         return NextResponse.json(
           { error: 'Unauthorized - Admin access required' },
           { status: 403 }
