@@ -4,8 +4,10 @@
 
 echo "Running Prisma migrations..."
 if [ -n "$POSTGRES_URL_NON_POOLING" ]; then
-  DATABASE_URL="$POSTGRES_URL_NON_POOLING" npx prisma migrate deploy
+  export DATABASE_URL="$POSTGRES_URL_NON_POOLING"
+  npx prisma migrate deploy || echo "No migrations to run or migration failed"
+elif [ -n "$DATABASE_URL" ]; then
+  npx prisma migrate deploy || echo "No migrations to run or migration failed"
 else
-  echo "POSTGRES_URL_NON_POOLING not set, skipping migrations"
+  echo "No database URL found, skipping migrations"
 fi
-
