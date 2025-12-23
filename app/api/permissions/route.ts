@@ -32,11 +32,19 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // In development, allow access if no permissions are set
+    // If no permissions exist for this company, allow access (bootstrap scenario)
+    // Check if ANY permissions exist for this company
+    const anyPermissions = await prisma.userPermission.findFirst({
+      where: { companyId },
+    });
+
     if (!permission) {
-      if (process.env.NODE_ENV === 'development') {
-        // Allow access in development
+      // If no permissions exist at all for this company, allow access (first user setup)
+      if (!anyPermissions) {
+        console.log('No permissions exist for company, allowing bootstrap access');
+        // Allow access to set up first admin
       } else {
+        // Permissions exist but user doesn't have one - require admin
         return NextResponse.json(
           { error: 'Unauthorized - Admin access required' },
           { status: 403 }
@@ -93,9 +101,18 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // In development, allow if no permissions are set
+    // Check if ANY permissions exist for this company
+    const anyPermissions = await prisma.userPermission.findFirst({
+      where: { companyId },
+    });
+
     if (!requesterPermission) {
-      if (process.env.NODE_ENV !== 'development') {
+      // If no permissions exist at all, allow first user to create admin (bootstrap)
+      if (!anyPermissions) {
+        console.log('No permissions exist, allowing bootstrap admin creation');
+        // Allow access
+      } else {
+        // Permissions exist but requester doesn't have one - require admin
         return NextResponse.json(
           { error: 'Unauthorized - Admin access required' },
           { status: 403 }
