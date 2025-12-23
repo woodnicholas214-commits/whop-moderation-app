@@ -43,7 +43,7 @@ export default async function DashboardPage() {
         return (
           <div className="space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">No Company Found</h1>
-            <p className="text-gray-600 mb-4">The database needs to be initialized, but we couldn't create the default company automatically.</p>
+            <p className="text-gray-600 mb-4">The database needs to be initialized, but we could not create the default company automatically.</p>
             <p className="text-sm text-gray-500">Please check your database connection and try refreshing the page.</p>
           </div>
         );
