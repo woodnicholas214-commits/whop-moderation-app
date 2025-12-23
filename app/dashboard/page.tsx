@@ -30,7 +30,15 @@ export default async function DashboardPage() {
       return (
         <div className="space-y-6">
           <h1 className="text-3xl font-bold text-gray-900">No Company Found</h1>
-          <p className="text-gray-600">Please run the seed script: npm run db:seed</p>
+          <p className="text-gray-600 mb-4">The database needs to be initialized. Click the button below to create the default company.</p>
+          <form action="/api/seed" method="POST">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Initialize Database
+            </button>
+          </form>
         </div>
       );
     }
