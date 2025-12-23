@@ -16,6 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Allow embedding in iframes for Whop */}
+        <meta httpEquiv="X-Frame-Options" content="ALLOWALL" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
