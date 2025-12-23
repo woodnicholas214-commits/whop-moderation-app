@@ -148,7 +148,7 @@ export default function KeywordsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">Keyword Filters</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Keyword Filters</h1>
         <div>Loading...</div>
       </div>
     );
@@ -158,7 +158,7 @@ export default function KeywordsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Keyword Filters</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Keyword Filters</h1>
           <p className="mt-2 text-gray-600">
             Manage keywords that will automatically restrict or delete posts
           </p>
@@ -172,18 +172,18 @@ export default function KeywordsPage() {
       </div>
 
       {showAddForm && (
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Add New Keyword Filter</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Add New Keyword Filter</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Keywords (one per line)
               </label>
               <textarea
                 value={newKeywords}
                 onChange={(e) => setNewKeywords(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 rows={6}
                 placeholder="spam&#10;inappropriate&#10;badword"
               />
@@ -194,13 +194,13 @@ export default function KeywordsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Match Type
                 </label>
                 <select
                   value={newMatchType}
                   onChange={(e) => setNewMatchType(e.target.value as any)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="keyword_contains">Contains keyword</option>
                   <option value="keyword_exact">Exact match</option>
@@ -208,13 +208,13 @@ export default function KeywordsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Action
                 </label>
                 <select
                   value={newAction}
                   onChange={(e) => setNewAction(e.target.value as any)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="restrict">Restrict (send to review)</option>
                   <option value="delete">Delete immediately</option>
@@ -228,7 +228,7 @@ export default function KeywordsPage() {
                   setShowAddForm(false);
                   setNewKeywords('');
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 Cancel
               </button>
@@ -245,7 +245,7 @@ export default function KeywordsPage() {
       )}
 
       {rules.length === 0 ? (
-        <div className="bg-white p-12 rounded-lg shadow text-center">
+        <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
           <p className="text-gray-500 mb-4">No keyword filters yet</p>
           <button
             onClick={() => setShowAddForm(true)}
@@ -257,11 +257,11 @@ export default function KeywordsPage() {
       ) : (
         <div className="space-y-4">
           {rules.map((rule) => (
-            <div key={rule.id} className="bg-white p-6 rounded-lg shadow">
+            <div key={rule.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{rule.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{rule.name}</h3>
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
                         rule.enabled
@@ -288,7 +288,7 @@ export default function KeywordsPage() {
                     {rule.keywords.map((keyword, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded"
+                        className="px-2 py-1 bg-gray-100 text-gray-700 dark:text-gray-300 text-sm rounded"
                       >
                         {keyword}
                       </span>
@@ -312,7 +312,7 @@ export default function KeywordsPage() {
                 <select
                   value={rule.action}
                   onChange={(e) => handleUpdateAction(rule.id, e.target.value as any)}
-                  className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="restrict">Restrict (review)</option>
                   <option value="delete">Delete immediately</option>

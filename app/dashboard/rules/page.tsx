@@ -58,7 +58,7 @@ export default function RulesPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Moderation Rules</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Moderation Rules</h1>
           <p className="mt-2 text-gray-600">Create and manage content moderation rules</p>
         </div>
         <Link
@@ -70,7 +70,7 @@ export default function RulesPage() {
       </div>
 
       {rules.length === 0 ? (
-        <div className="bg-white p-12 rounded-lg shadow text-center">
+        <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
           <p className="text-gray-500 mb-4">No rules yet</p>
           <Link
             href="/dashboard/rules/new"
@@ -80,7 +80,7 @@ export default function RulesPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -101,13 +101,13 @@ export default function RulesPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
               {rules.map((rule) => (
                 <tr key={rule.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Link
                       href={`/dashboard/rules/${rule.id}`}
-                      className="text-sm font-medium text-gray-900 hover:text-blue-600"
+                      className="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600"
                     >
                       {rule.name}
                     </Link>

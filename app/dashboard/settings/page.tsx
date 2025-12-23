@@ -254,7 +254,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
         <div>Loading...</div>
       </div>
     );
@@ -267,7 +267,7 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
         <p className="mt-2 text-gray-600">Configure app settings and user permissions</p>
       </div>
 
@@ -292,9 +292,9 @@ export default function SettingsPage() {
 
       {/* Permissions Tab */}
       {activeTab === 'permissions' && (
-        <div className="bg-white p-6 rounded-lg shadow space-y-6">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-6">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">User Permissions</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">User Permissions</h2>
             <p className="text-sm text-gray-600 mb-4">
               Manage who can access the AutoMod app and their permission levels.
             </p>
@@ -306,19 +306,19 @@ export default function SettingsPage() {
             </div>
 
             <div className="mb-6">
-              <h3 className="text-md font-medium text-gray-700 mb-3">Add User</h3>
+              <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Add User</h3>
               <div className="flex space-x-4">
                 <input
                   type="text"
                   value={newUserId}
                   onChange={(e) => setNewUserId(e.target.value)}
                   placeholder="Whop User ID"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 />
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value as any)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="admin">Admin</option>
                   <option value="moderator">Moderator</option>
@@ -347,15 +347,15 @@ export default function SettingsPage() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
                     {permissions.map((perm) => (
                       <tr key={perm.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{perm.userId}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{perm.userId}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <select
                             value={perm.role}
                             onChange={(e) => handleUpdatePermission(perm.userId, e.target.value)}
-                            className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           >
                             <option value="admin">Admin</option>
                             <option value="moderator">Moderator</option>
@@ -385,13 +385,13 @@ export default function SettingsPage() {
 
       {/* Moderation Tab */}
       {activeTab === 'moderation' && (
-        <div className="bg-white p-6 rounded-lg shadow space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900">Moderation Settings</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Moderation Settings</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Auto-Delete Enabled</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Auto-Delete Enabled</label>
                 <p className="text-sm text-gray-500">Automatically delete messages that violate rules</p>
               </div>
               <input
@@ -406,14 +406,14 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Default Action</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Default Action</label>
               <select
                 value={settings.moderation.defaultAction}
                 onChange={(e) => {
                   const updated = { ...settings.moderation, defaultAction: e.target.value as any };
                   handleSaveSettings('moderation', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="delete">Delete immediately</option>
                 <option value="restrict">Send to review queue</option>
@@ -422,7 +422,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Require Review for High Severity</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Require Review for High Severity</label>
                 <p className="text-sm text-gray-500">Always send high severity incidents to review queue</p>
               </div>
               <input
@@ -437,7 +437,7 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Max Incidents Per User (before auto-action)
               </label>
               <input
@@ -447,14 +447,14 @@ export default function SettingsPage() {
                   const updated = { ...settings.moderation, maxIncidentsPerUser: parseInt(e.target.value) || 5 };
                   handleSaveSettings('moderation', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 min="1"
                 max="100"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Cooldown Period (seconds)
               </label>
               <input
@@ -464,7 +464,7 @@ export default function SettingsPage() {
                   const updated = { ...settings.moderation, cooldownPeriod: parseInt(e.target.value) || 3600 };
                   handleSaveSettings('moderation', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 min="0"
               />
             </div>
@@ -474,13 +474,13 @@ export default function SettingsPage() {
 
       {/* Notifications Tab */}
       {activeTab === 'notifications' && (
-        <div className="bg-white p-6 rounded-lg shadow space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900">Notification Settings</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Notification Settings</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Notify on Incident</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Notify on Incident</label>
                 <p className="text-sm text-gray-500">Send notifications when incidents are created</p>
               </div>
               <input
@@ -496,7 +496,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Notify on Rule Trigger</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Notify on Rule Trigger</label>
                 <p className="text-sm text-gray-500">Send notifications when rules are triggered</p>
               </div>
               <input
@@ -511,7 +511,7 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Escalation Channel ID</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Escalation Channel ID</label>
               <input
                 type="text"
                 value={settings.notifications.escalationChannel}
@@ -520,13 +520,13 @@ export default function SettingsPage() {
                   handleSaveSettings('notifications', updated);
                 }}
                 placeholder="Channel ID for escalation notifications"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               />
             </div>
 
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Email Notifications</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email Notifications</label>
                 <p className="text-sm text-gray-500">Send email notifications for important events</p>
               </div>
               <input
@@ -545,13 +545,13 @@ export default function SettingsPage() {
 
       {/* Webhook Tab */}
       {activeTab === 'webhook' && (
-        <div className="bg-white p-6 rounded-lg shadow space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900">Webhook Settings</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Webhook Settings</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Webhook Enabled</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Webhook Enabled</label>
                 <p className="text-sm text-gray-500">Process incoming webhook events</p>
               </div>
               <input
@@ -567,7 +567,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">Verify Signature</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Verify Signature</label>
                 <p className="text-sm text-gray-500">Verify webhook signatures for security</p>
               </div>
               <input
@@ -582,7 +582,7 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Rate Limit (requests per minute)
               </label>
               <input
@@ -592,7 +592,7 @@ export default function SettingsPage() {
                   const updated = { ...settings.webhook, rateLimitPerMinute: parseInt(e.target.value) || 100 };
                   handleSaveSettings('webhook', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 min="1"
                 max="1000"
               />
@@ -603,12 +603,12 @@ export default function SettingsPage() {
 
       {/* General Tab */}
       {activeTab === 'general' && (
-        <div className="bg-white p-6 rounded-lg shadow space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900">General Settings</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">General Settings</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">App Name</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">App Name</label>
               <input
                 type="text"
                 value={settings.general.appName}
@@ -616,19 +616,19 @@ export default function SettingsPage() {
                   const updated = { ...settings.general, appName: e.target.value };
                   handleSaveSettings('general', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timezone</label>
               <select
                 value={settings.general.timezone}
                 onChange={(e) => {
                   const updated = { ...settings.general, timezone: e.target.value };
                   handleSaveSettings('general', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="UTC">UTC</option>
                 <option value="America/New_York">Eastern Time</option>
@@ -639,14 +639,14 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Language</label>
               <select
                 value={settings.general.language}
                 onChange={(e) => {
                   const updated = { ...settings.general, language: e.target.value };
                   handleSaveSettings('general', updated);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="en">English</option>
                 <option value="es">Spanish</option>

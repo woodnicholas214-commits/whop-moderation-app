@@ -63,21 +63,21 @@ export default function ReviewQueuePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Review Queue</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Review Queue</h1>
         <p className="mt-2 text-gray-600">Review and moderate flagged content</p>
       </div>
 
       {incidents.length === 0 ? (
-        <div className="bg-white p-12 rounded-lg shadow text-center">
+        <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
           <p className="text-gray-500">No pending incidents</p>
         </div>
       ) : (
         <div className="space-y-4">
           {incidents.map((incident) => (
-            <div key={incident.id} className="bg-white p-6 rounded-lg shadow">
+            <div key={incident.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     {incident.rule?.name || 'Unknown Rule'}
                   </h3>
                   <p className="text-sm text-gray-500">
@@ -107,7 +107,7 @@ export default function ReviewQueuePage() {
               </div>
 
               <div className="bg-gray-50 p-4 rounded mb-4">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                   {incident.contentSnapshot?.content || 'No content'}
                 </p>
               </div>

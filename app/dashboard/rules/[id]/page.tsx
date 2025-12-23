@@ -58,7 +58,7 @@ export default function RuleDetailPage() {
           >
             ← Back to Rules
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">{rule.name}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{rule.name}</h1>
           {rule.description && (
             <p className="mt-2 text-gray-600">{rule.description}</p>
           )}
@@ -71,40 +71,40 @@ export default function RuleDetailPage() {
         </button>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow space-y-6">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-6">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Settings</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Settings</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-gray-500">Status</label>
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-gray-900 dark:text-gray-100">
                 {rule.enabled ? 'Enabled' : 'Disabled'}
               </p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-500">Priority</label>
-              <p className="text-sm text-gray-900">{rule.priority}</p>
+              <p className="text-sm text-gray-900 dark:text-gray-100">{rule.priority}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-500">Severity</label>
-              <p className="text-sm text-gray-900 capitalize">{rule.severity}</p>
+              <p className="text-sm text-gray-900 dark:text-gray-100 capitalize">{rule.severity}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-500">Mode</label>
-              <p className="text-sm text-gray-900 capitalize">{rule.mode}</p>
+              <p className="text-sm text-gray-900 dark:text-gray-100 capitalize">{rule.mode}</p>
             </div>
           </div>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Conditions</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Conditions</h2>
           <div className="space-y-2">
             {rule.conditions.map((condition) => (
               <div
                 key={condition.id}
                 className="p-3 bg-gray-50 rounded border border-gray-200"
               >
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {condition.type.replace(/_/g, ' ')}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
@@ -116,14 +116,14 @@ export default function RuleDetailPage() {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Actions</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Actions</h2>
           <div className="space-y-2">
             {rule.actions.map((action) => (
               <div
                 key={action.id}
                 className="p-3 bg-gray-50 rounded border border-gray-200"
               >
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {action.type.replace(/_/g, ' ')}
                 </p>
                 {Object.keys(action.config).length > 0 && (

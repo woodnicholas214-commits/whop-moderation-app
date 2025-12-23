@@ -193,7 +193,7 @@ export default function LinksPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">Link/Domain Rules</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Link/Domain Rules</h1>
         <div>Loading...</div>
       </div>
     );
@@ -203,7 +203,7 @@ export default function LinksPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Link/Domain Rules</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Link/Domain Rules</h1>
           <p className="mt-2 text-gray-600">
             Manage rules for links and domains - block or allow specific links/domains
           </p>
@@ -217,18 +217,18 @@ export default function LinksPage() {
       </div>
 
       {showAddForm && (
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Add New Link/Domain Rule</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Add New Link/Domain Rule</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Rule Type
               </label>
               <select
                 value={ruleType}
                 onChange={(e) => setRuleType(e.target.value as any)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="whop_only">Whop.com Only (Delete all other links)</option>
                 <option value="block_list">Block List (Block specific domains/links)</option>
@@ -244,13 +244,13 @@ export default function LinksPage() {
             {ruleType !== 'whop_only' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Domains to {ruleType === 'block_list' ? 'Block' : 'Allow'} (one per line)
                   </label>
                   <textarea
                     value={newDomains}
                     onChange={(e) => setNewDomains(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                     rows={4}
                     placeholder="example.com&#10;spam-site.com&#10;malicious-domain.com"
                   />
@@ -260,13 +260,13 @@ export default function LinksPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Links to {ruleType === 'block_list' ? 'Block' : 'Allow'} (one per line)
                   </label>
                   <textarea
                     value={newLinks}
                     onChange={(e) => setNewLinks(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                     rows={4}
                     placeholder="https://example.com/page&#10;https://spam-site.com/bad-link"
                   />
@@ -278,13 +278,13 @@ export default function LinksPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Action
               </label>
               <select
                 value={newAction}
                 onChange={(e) => setNewAction(e.target.value as any)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="delete">Delete immediately</option>
                 <option value="restrict">Restrict (send to review)</option>
@@ -298,7 +298,7 @@ export default function LinksPage() {
                   setNewDomains('');
                   setNewLinks('');
                 }}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 Cancel
               </button>
@@ -315,7 +315,7 @@ export default function LinksPage() {
       )}
 
       {rules.length === 0 ? (
-        <div className="bg-white p-12 rounded-lg shadow text-center">
+        <div className="bg-white dark:bg-gray-800 p-12 rounded-lg shadow text-center">
           <p className="text-gray-500 mb-4">No link/domain rules yet</p>
           <button
             onClick={() => setShowAddForm(true)}
@@ -327,11 +327,11 @@ export default function LinksPage() {
       ) : (
         <div className="space-y-4">
           {rules.map((rule) => (
-            <div key={rule.id} className="bg-white p-6 rounded-lg shadow">
+            <div key={rule.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{rule.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{rule.name}</h3>
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
                         rule.enabled
@@ -357,12 +357,12 @@ export default function LinksPage() {
                   
                   {rule.domains.length > 0 && (
                     <div className="mb-2">
-                      <p className="text-sm font-medium text-gray-700 mb-1">Domains:</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Domains:</p>
                       <div className="flex flex-wrap gap-2">
                         {rule.domains.map((domain, idx) => (
                           <span
                             key={idx}
-                            className="px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded"
+                            className="px-2 py-1 bg-gray-100 text-gray-700 dark:text-gray-300 text-sm rounded"
                           >
                             {domain}
                           </span>
@@ -373,12 +373,12 @@ export default function LinksPage() {
 
                   {rule.links.length > 0 && (
                     <div>
-                      <p className="text-sm font-medium text-gray-700 mb-1">Links:</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Links:</p>
                       <div className="flex flex-wrap gap-2">
                         {rule.links.map((link, idx) => (
                           <span
                             key={idx}
-                            className="px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded break-all"
+                            className="px-2 py-1 bg-gray-100 text-gray-700 dark:text-gray-300 text-sm rounded break-all"
                           >
                             {link}
                           </span>
@@ -404,7 +404,7 @@ export default function LinksPage() {
                 <select
                   value={rule.action}
                   onChange={(e) => handleUpdateAction(rule.id, e.target.value as any)}
-                  className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="restrict">Restrict (review)</option>
                   <option value="delete">Delete immediately</option>
