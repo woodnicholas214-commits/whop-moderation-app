@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     const keywordRules = rules.map(rule => {
       const keywordCondition = rule.conditions[0];
       const keywords = keywordCondition
-        ? (parseJson(keywordCondition.config, { keywords: [] }) as { keywords?: string[] }).keywords || []
+        ? ((parseJson(keywordCondition.config, { keywords: [] }) as any).keywords || []) as string[]
         : [];
       
       const actionType = rule.actions[0]?.type || 'flag_review';
