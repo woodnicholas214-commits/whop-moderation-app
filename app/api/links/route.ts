@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Link/Domain Rules API
  * Manages link and domain-based moderation rules
  */

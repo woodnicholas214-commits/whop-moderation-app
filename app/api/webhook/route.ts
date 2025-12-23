@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Webhook endpoint for Whop events
  * Handles chat messages, forum posts, and other events
  */

@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Keyword Filters API
  * Manages keyword-based moderation rules
  */

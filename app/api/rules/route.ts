@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Rules CRUD API
  */
 

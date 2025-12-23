@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Individual link/domain rule operations
  */
 

@@ -107,7 +107,7 @@ export class RulesEngine {
     features: ContentFeatures
   ): { matches: boolean; matchedValue?: string } {
     const { type } = condition;
-    const config = parseJson(condition.config, {});
+    const config = parseJson(condition.config, {}) as any;
     const { normalizedText, text, links, domains, mentions, emojiCount, capsRatio, repeatedText } = features;
 
     switch (type) {
@@ -299,10 +299,15 @@ export class RulesEngine {
 
     for (const rule of rules) {
       // Check scope
-      const scope = parseJson(rule.scope, { type: 'all', channels: [], forums: [], exclusions: [] });
+      const scope = parseJson(rule.scope, { type: 'all', channels: [], forums: [], exclusions: [] }) as {
+        type: 'all' | 'selected';
+        channels?: string[];
+        forums?: string[];
+        exclusions?: string[];
+      };
       if (scope.type === 'selected') {
-        const channels = scope.channels || [];
-        const forums = scope.forums || [];
+        const channels = (scope.channels || []) as string[];
+        const forums = (scope.forums || []) as string[];
         const isInScope = 
           (source === 'chat' && channels.includes(channelId)) ||
           (source === 'forum' && forums.includes(channelId));

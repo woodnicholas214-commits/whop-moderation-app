@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Get company by Whop ID
  */
 

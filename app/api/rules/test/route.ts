@@ -1,4 +1,5 @@
 /**
+export const dynamic = 'force-dynamic';
  * Test rule against sample content
  */
 

@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import { requireAuth } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 const navItems = [
   { href: '/dashboard', label: 'Overview' },
   { href: '/dashboard/rules', label: 'Rules' },
