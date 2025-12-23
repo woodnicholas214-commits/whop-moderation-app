@@ -27,20 +27,27 @@ export default async function DashboardPage() {
     }
 
     if (!companyId) {
-      return (
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-gray-900">No Company Found</h1>
-          <p className="text-gray-600 mb-4">The database needs to be initialized. Click the button below to create the default company.</p>
-          <form action="/api/seed" method="POST">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Initialize Database
-            </button>
-          </form>
-        </div>
-      );
+      // Try to create default company
+      try {
+        const defaultCompany = await prisma.company.upsert({
+          where: { whopId: 'default_company' },
+          update: {},
+          create: {
+            whopId: 'default_company',
+            name: 'Default Company',
+          },
+        });
+        companyId = defaultCompany.id;
+      } catch (seedError) {
+        console.error('Failed to create default company:', seedError);
+        return (
+          <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-gray-900">No Company Found</h1>
+            <p className="text-gray-600 mb-4">The database needs to be initialized, but we couldn't create the default company automatically.</p>
+            <p className="text-sm text-gray-500">Please check your database connection and try refreshing the page.</p>
+          </div>
+        );
+      }
     }
 
   const [rulesCount, incidentsCount, pendingCount] = await Promise.all([
