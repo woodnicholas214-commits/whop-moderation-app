@@ -1,5 +1,6 @@
 /**
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
  * Link/Domain Rules API
  * Manages link and domain-based moderation rules
  */

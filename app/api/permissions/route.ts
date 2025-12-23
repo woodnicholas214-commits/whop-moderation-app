@@ -1,5 +1,6 @@
 /**
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
  * User Permissions API
  */
 

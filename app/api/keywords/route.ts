@@ -1,5 +1,6 @@
 /**
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
  * Keyword Filters API
  * Manages keyword-based moderation rules
  */
