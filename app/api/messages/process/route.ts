@@ -19,7 +19,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { RulesEngine } from '@/lib/rules-engine';
 import { getWhopClient } from '@/lib/whop/client';
-import { stringifyJson } from '@/lib/json-helper';
+import { stringifyJson, parseJson } from '@/lib/json-helper';
 
 export async function POST(request: NextRequest) {
   try {
