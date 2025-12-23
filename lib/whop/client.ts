@@ -123,6 +123,30 @@ export class WhopClient {
       body: JSON.stringify({ content: message }),
     });
   }
+
+  /**
+   * Get recent messages from a channel
+   * TODO: Replace with actual Whop API endpoint
+   * This endpoint may not exist - check Whop API documentation
+   */
+  async getChannelMessages(
+    channelId: string,
+    limit: number = 50,
+    since?: string
+  ): Promise<any[]> {
+    // TODO: Implement actual Whop API call
+    // Example: GET /api/v2/channels/{channelId}/messages?limit=50&since={timestamp}
+    throw new Error('Message fetching not yet implemented - needs Whop API endpoint');
+  }
+
+  /**
+   * Get all channels for a company
+   * TODO: Replace with actual Whop API endpoint
+   */
+  async getCompanyChannels(companyId: string): Promise<WhopChannel[]> {
+    // TODO: Implement actual Whop API call
+    return this.getChannels(companyId);
+  }
 }
 
 export function getWhopClient(): WhopClient {

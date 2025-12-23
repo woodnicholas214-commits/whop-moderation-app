@@ -1,32 +1,56 @@
 # Webhook Setup Instructions
 
-## Where to Configure Webhook in Whop
+## ⚠️ Important: Whop Webhooks Don't Support Chat Messages
 
-1. **Go to Whop Developer Dashboard**
-   - Visit: https://developer.whop.com (or your Whop developer portal)
-   - Log in with your Whop account
+**Whop's webhook system does NOT provide events for chat messages or forum posts.** The available webhook events are limited to:
+- Payment events (invoice_created, payment_succeeded, etc.)
+- Membership events (membership_activated, membership_deactivated)
+- Entry events (entry_created, entry_approved, etc.)
+- Withdrawal and dispute events
 
-2. **Navigate to Your App**
-   - Go to "Apps" or "My Apps"
-   - Find your moderation app (or create a new app if needed)
+**This means webhooks alone cannot be used to moderate chat messages in real-time.**
 
-3. **Configure Webhook**
-   - Look for "Webhooks" or "Event Subscriptions" section
-   - Click "Add Webhook" or "Configure Webhook"
+## Alternative Approaches
 
-4. **Enter Webhook Details**
-   - **Webhook URL**: `https://whop-moderation-app-real.vercel.app/api/webhook`
-   - **Webhook Secret**: Use the same value as your `WEBHOOK_SECRET` environment variable
-     - Current secret: `3e045c5bb07a56bebd202701e39c1fc70dbd097d5a1e1a3674132a1593d65ab2`
-   - **Events to Subscribe**: Select the following events:
-     - `message.created` - When a new chat message is created
-     - `message.updated` - When a chat message is edited
-     - `forum_post.created` - When a new forum post is created
-     - `forum_post.updated` - When a forum post is edited
+Since Whop webhooks don't support message events, you have a few options:
 
-5. **Save Configuration**
-   - Click "Save" or "Create Webhook"
-   - Whop will send a test webhook to verify the endpoint
+### Option 1: Poll Whop API for Messages (Recommended)
+Create a background job that periodically polls Whop's API for new messages and processes them. This requires:
+- A Whop API endpoint to fetch messages (if available)
+- A scheduled job/worker to poll regularly
+- Message deduplication to avoid processing the same message twice
+
+### Option 2: Use Whop's Built-in Chat Moderation
+Whop's Chat app has some built-in moderation features:
+- Block URLs
+- Block media
+- User cooldown periods
+
+However, this is limited compared to custom keyword filtering.
+
+### Option 3: Manual Review Queue
+Use the app as a manual moderation tool where moderators review flagged content through the review queue interface.
+
+## Current Implementation Status
+
+The webhook endpoint (`/api/webhook`) is set up and ready, but it will only receive the events that Whop supports (payments, memberships, etc.). 
+
+**To make message moderation work, we need to:**
+1. Check if Whop has a Messages API endpoint we can poll
+2. Implement a polling mechanism
+3. Or integrate with Whop's Chat app API if available
+
+## Next Steps
+
+1. **Check Whop API Documentation** for message endpoints:
+   - Look for endpoints like `/api/v2/channels/{id}/messages`
+   - Check if there's a way to subscribe to message events
+   - See if there's a real-time API or WebSocket connection
+
+2. **If no API exists**, consider:
+   - Using the app as a manual moderation tool
+   - Requesting message webhook support from Whop
+   - Using a browser extension or other integration method
 
 ## Verify Webhook is Working
 
